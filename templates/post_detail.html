@@ -1,46 +1,50 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ .Post.Title }}</title>
+    <title>{{ .Post.Title }} - NcInside</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div class="container wide" style="max-width: 1200px; margin: 0 auto;">
+
+<nav class="navbar">
+    <a href="/index" class="nav-brand">
+        <span>🔹 NcInside</span>
+    </a>
+    <div class="nav-menu">
+        <a href="/index" class="nav-item active">Board</a>
+        <a href="#" class="nav-item" onclick="alert('Chat service is coming soon!');">Chat</a>
+    </div>
+    <div class="nav-profile">
+        <a href="/logout" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
     <div style="margin-bottom: 20px;">
-        <h2 style="margin-bottom: 10px;">{{ .Post.Title }}</h2>
-        <div style="display: flex; justify-content: space-between; align-items: center; color: #666; font-size: 14px;">
-            <div>
-                <span>Author: <strong style="color: #007bff;">{{ .Post.UserId }}</strong></span>
-                <span style="margin: 0 10px;">|</span>
-                <span>{{ .Post.CreatedAt.Format "2006-01-02 15:04:05" }}</span>
-            </div>
-            <div>
-                <span>No. {{ .Post.ID }}</span>
-            </div>
-        </div>
+        <a href="/index" style="color: var(--text-sub); text-decoration: none; font-size: 0.9rem;">&larr; Back to List</a>
     </div>
 
-    <hr>
+    <div class="content-card">
+        <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 24px;">
+            <h1 style="font-size: 1.75rem; margin-bottom: 12px;">{{ .Post.Title }}</h1>
+            <div style="display: flex; gap: 16px; color: var(--text-sub); font-size: 0.9rem;">
+                <span>Author: <strong>{{ .Post.UserId }}</strong></span>
+                <span>•</span>
+                <span>{{ .Post.CreatedAt.Format "Jan 02, 2006 15:04" }}</span>
+            </div>
+        </div>
 
-    <div style="min-height: 300px; padding: 20px 0; font-size: 16px; line-height: 1.6; white-space: pre-wrap;">{{ .Post.Content }}</div>
+        <div style="font-size: 1rem; line-height: 1.8; white-space: pre-wrap; min-height: 200px;">{{ .Post.Content }}</div>
+    </div>
 
-    <hr>
-
-    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-        <a href="/index">
-            <button type="button" class="btn-secondary" style="width: auto; padding: 10px 20px;">
-                go back
-            </button>
-        </a>
-
-        <form action="{{ .DeletePostPath }}" method="POST" onsubmit="return confirm('Sure to delete?');">
+    <div style="display: flex; justify-content: flex-end; gap: 12px;">
+        <form action="{{ .DeletePostPath }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
             <input type="hidden" name="id" value="{{ .Post.ID }}">
-            <button type="submit" class="btn-primary" style="background-color: #dc3545; border-color: #dc3545; width: auto; padding: 10px 20px;">
-                🗑️ Delete
-            </button>
+            <button type="submit" class="btn btn-danger">Delete Post</button>
         </form>
     </div>
 </div>
+
 </body>
 </html>

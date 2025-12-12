@@ -1,31 +1,42 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>post_create</title>
+    <title>New Post - NcInside</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div class="container wide">
-    <h2>posting..</h2>
-    <hr>
 
-    <form action="{{ .PostCreatePath }}" method="POST">
-        <div>
-            <label>Title</label>
-            <input type="text" name="title" placeholder="insert title..." required>
-        </div>
+<nav class="navbar">
+    <a href="/index" class="nav-brand"><span>🔹 NcInside</span></a>
+    <div class="nav-menu">
+        <a href="/index" class="nav-item active">Board</a>
+        <a href="#" class="nav-item">Chat</a>
+    </div>
+</nav>
 
-        <div>
-            <label>context</label>
-            <textarea name="content" placeholder="insert context..." required></textarea>
-        </div>
+<div class="container">
+    <div class="content-card">
+        <h2 style="margin-bottom: 24px;">Write a New Post</h2>
 
-        <div class="btn-group" style="margin-top: 20px;">
-            <button type="submit" class="btn-primary">Register</button>
-            <button type="button" class="btn-secondary" onclick="history.back()">cancel</button>
-        </div>
-    </form>
+        <form action="{{ .PostCreatePath }}" method="POST">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="Enter the title..." required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label>Content</label>
+                <textarea name="content" placeholder="Share your thoughts..." required></textarea>
+            </div>
+
+            <div class="btn-group" style="justify-content: flex-end; margin-top: 30px;">
+                <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
+                <button type="submit" class="btn btn-primary" style="min-width: 120px;">Publish</button>
+            </div>
+        </form>
+    </div>
 </div>
+
 </body>
 </html>

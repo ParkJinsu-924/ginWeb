@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Auth Service</title>
+    <title>Login - NcInside</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-<div class="container">
-    <h2>Auth Service</h2>
+<body class="center-layout">
+<div class="auth-card">
+    <h2 style="margin-bottom: 30px; color: var(--primary-color);">Auth Service</h2>
+
     <form action="/login" method="POST">
-        <div>
-            <label>ID</label>
-            <input type="text" name="userId" placeholder="id plz" required>
+        <div class="form-group">
+            <label>User ID</label>
+            <input type="text" name="userId" placeholder="Enter your ID" required>
         </div>
-        <div>
+        <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" placeholder="pw plz" required>
+            <input type="password" name="password" placeholder="Enter your password" required>
         </div>
 
-        <div class="btn-group">
-            <button type="submit" class="btn-primary">Auth</button>
-            <button type="button" class="btn-secondary" onclick="location.href='/signup'">Join</button>
-        </div>
+        <button type="submit" class="btn btn-primary btn-full" style="margin-top: 10px;">Sign In</button>
     </form>
+
+    <div style="margin-top: 20px; font-size: 0.9rem; color: var(--text-sub);">
+        Don't have an account?
+        <a href="/signup" style="color: var(--primary-color); font-weight: 600; text-decoration: none;">Sign Up</a>
+    </div>
 </div>
 </body>
 </html>

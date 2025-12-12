@@ -1,60 +1,69 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DashBoard</title>
+    <title>Enterprise - Dashboard</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div class="container wide" style="max-width: 1200px; margin: 0 auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>DoubleDashes</h2>
-        <div>
-            <span style="color: #666; font-size: 14px; margin-right: 10px;">
-                Dear. <strong style="color: #007bff;">{{ .User }}</strong>
-            </span>
-            <a href="/logout" class="btn-secondary" style="padding: 5px 10px; font-size: 12px;">Logout</a>
-        </div>
+
+<nav class="navbar">
+    <a href="/index" class="nav-brand">
+        <span>🔹 ginWeb</span>
+    </a>
+    <div class="nav-menu">
+        <a href="/index" class="nav-item active">Board</a>
+        <a href="#" class="nav-item" onclick="alert('Chat service is coming soon!'); return false;">Chat</a>
     </div>
+    <div class="nav-profile">
+        <span class="user-badge">{{ .User }}</span>
+        <a href="/logout" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">Logout</a>
+    </div>
+</nav>
 
-    <hr>
-
-    <table class="board-table" style="width: 100%;">
-        <thead>
-        <tr>
-            <th style="width: 10%;">ID</th>
-            <th style="width: 50%;">Title</th>
-            <th style="width: 20%;">Author</th>
-            <th style="width: 20%;">Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{ if .Posts }}
-        {{ range .Posts }}
-        <tr>
-            <td>{{ .ID }}</td>
-            <td><a href="/posts/{{ .ID }}" style="font-weight: bold;">{{ .Title }}</a></td>
-            <td>{{ .UserId }}</td>
-            <td>{{ .CreatedAt.Format "2006-01-02 15:04:05" }}</td>
-        </tr>
-        {{ end }}
-        {{ else }}
-        <tr>
-            <td colspan="4" style="text-align: center; color: #999; padding: 30px;">
-                The list is empty.
-            </td>
-        </tr>
-        {{ end }}
-        </tbody>
-    </table>
-
-    <div style="margin-top: 20px; text-align: right;">
-        <a href="{{ .PostFormPath }}">
-            <button type="button" class="btn-primary" style="width: auto; padding: 10px 20px;">
-                ✏️ POST REGISTER
-            </button>
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="font-size: 1.5rem; font-weight: 700;">Enterprise</h2>
+        <a href="{{ .PostFormPath }}" class="btn btn-primary">
+            + New Post
         </a>
     </div>
+
+    <div class="content-card" style="padding: 0;">
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 10%;">No.</th>
+                    <th style="width: 50%;">Title</th>
+                    <th style="width: 20%;">Author</th>
+                    <th style="width: 20%;">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{ if .Posts }}
+                {{ range .Posts }}
+                <tr>
+                    <td style="color: var(--text-sub);">{{ .ID }}</td>
+                    <td><a href="/posts/{{ .ID }}" class="post-link">{{ .Title }}</a></td>
+                    <td>{{ .UserId }}</td>
+                    <td style="color: var(--text-sub); font-size: 0.85rem;">
+                        {{ .CreatedAt.Format "2006-01-02 15:04" }}
+                    </td>
+                </tr>
+                {{ end }}
+                {{ else }}
+                <tr>
+                    <td colspan="4" class="empty-state">
+                        <p>No posts yet. Be the first to write!</p>
+                    </td>
+                </tr>
+                {{ end }}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
 </body>
 </html>

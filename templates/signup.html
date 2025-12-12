@@ -1,31 +1,34 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Join</title>
+    <title>Sign Up - NcInside</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-<div class="container">
-    <h2>Sign Up</h2>
+<body class="center-layout">
+<div class="auth-card">
+    <h2 style="margin-bottom: 30px;">Create Account</h2>
+
     <form action="/signup" method="POST">
-        <div>
-            <label>ID</label>
-            <input type="text" name="userId" placeholder="id plz" required>
+        <div class="form-group">
+            <label>User ID</label>
+            <input type="text" name="userId" placeholder="Choose an ID" required>
         </div>
-        <div>
+        <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" placeholder="pw plz" required>
+            <input type="password" name="password" placeholder="Create a password" required>
         </div>
-        <div>
+        <div class="form-group">
             <label>Nickname</label>
-            <input type="text" name="username" placeholder="nickname plz" required>
+            <input type="text" name="username" placeholder="Your display name" required>
         </div>
 
-        <button type="submit" class="btn-primary" style="margin-top: 10px;">Join</button>
+        <button type="submit" class="btn btn-primary btn-full" style="margin-top: 10px;">Sign Up</button>
     </form>
-    <br>
-    <a href="/login">Go Auth!</a>
+
+    <div style="margin-top: 20px; font-size: 0.9rem;">
+        <a href="/login" style="color: var(--text-sub); text-decoration: none;">&larr; Back to Login</a>
+    </div>
 </div>
 </body>
 </html>
