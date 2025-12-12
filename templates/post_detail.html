@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Post.Title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container wide" style="max-width: 1200px; margin: 0 auto;">
+    <div style="margin-bottom: 20px;">
+        <h2 style="margin-bottom: 10px;">{{ .Post.Title }}</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; color: #666; font-size: 14px;">
+            <div>
+                <span>Author: <strong style="color: #007bff;">{{ .Post.UserId }}</strong></span>
+                <span style="margin: 0 10px;">|</span>
+                <span>{{ .Post.CreatedAt.Format "2006-01-02 15:04:05" }}</span>
+            </div>
+            <div>
+                <span>No. {{ .Post.ID }}</span>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div style="min-height: 300px; padding: 20px 0; font-size: 16px; line-height: 1.6; white-space: pre-wrap;">{{ .Post.Content }}</div>
+
+    <hr>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <a href="/index">
+            <button type="button" class="btn-secondary" style="width: auto; padding: 10px 20px;">
+                go back
+            </button>
+        </a>
+
+        <form action="{{ .DeletePostPath }}" method="POST" onsubmit="return confirm('Sure to delete?');">
+            <input type="hidden" name="id" value="{{ .Post.ID }}">
+            <button type="submit" class="btn-primary" style="background-color: #dc3545; border-color: #dc3545; width: auto; padding: 10px 20px;">
+                🗑️ Delete
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

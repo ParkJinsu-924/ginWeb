@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <title>DashBoard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container wide" style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>DoubleDashes</h2>
+        <div>
+            <span style="color: #666; font-size: 14px; margin-right: 10px;">
+                Dear. <strong style="color: #007bff;">{{ .User }}</strong>
+            </span>
+            <a href="/logout" class="btn-secondary" style="padding: 5px 10px; font-size: 12px;">Logout</a>
+        </div>
+    </div>
+
+    <hr>
+
+    <table class="board-table" style="width: 100%;">
+        <thead>
+        <tr>
+            <th style="width: 10%;">ID</th>
+            <th style="width: 50%;">Title</th>
+            <th style="width: 20%;">Author</th>
+            <th style="width: 20%;">Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{ if .Posts }}
+        {{ range .Posts }}
+        <tr>
+            <td>{{ .ID }}</td>
+            <td><a href="/posts/{{ .ID }}" style="font-weight: bold;">{{ .Title }}</a></td>
+            <td>{{ .UserId }}</td>
+            <td>{{ .CreatedAt.Format "2006-01-02 15:04:05" }}</td>
+        </tr>
+        {{ end }}
+        {{ else }}
+        <tr>
+            <td colspan="4" style="text-align: center; color: #999; padding: 30px;">
+                The list is empty.
+            </td>
+        </tr>
+        {{ end }}
+        </tbody>
+    </table>
+
+    <div style="margin-top: 20px; text-align: right;">
+        <a href="{{ .PostFormPath }}">
+            <button type="button" class="btn-primary" style="width: auto; padding: 10px 20px;">
+                ✏️ POST REGISTER
+            </button>
+        </a>
+    </div>
+</div>
+</body>
+</html>

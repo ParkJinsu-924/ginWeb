@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <title>Join</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Sign Up</h2>
+    <form action="/signup" method="POST">
+        <div>
+            <label>ID</label>
+            <input type="text" name="userId" placeholder="id plz" required>
+        </div>
+        <div>
+            <label>Password</label>
+            <input type="password" name="password" placeholder="pw plz" required>
+        </div>
+        <div>
+            <label>Nickname</label>
+            <input type="text" name="username" placeholder="nickname plz" required>
+        </div>
+
+        <button type="submit" class="btn-primary" style="margin-top: 10px;">Join</button>
+    </form>
+    <br>
+    <a href="/login">Go Auth!</a>
+</div>
+</body>
+</html>
