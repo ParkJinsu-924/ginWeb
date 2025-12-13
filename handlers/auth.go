@@ -67,6 +67,6 @@ func LoginHandler() func(c *gin.Context) {
 		session.Set(common.SessionUserNicknameKey, user.Nickname)
 		session.Save()
 
-		c.Redirect(http.StatusFound, common.HomeEndpoint) // "/"
+		GoHome(c)
 	}
 }

@@ -6,7 +6,6 @@ import (
 	"ginWeb/db"
 	"ginWeb/handlers"
 	"ginWeb/middlewares"
-	"net/http"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -22,7 +21,7 @@ func main() {
 
 	store := cookie.NewStore([]byte("!@%%#!@#$!@" /*대칭키*/))
 	r.Use(sessions.Sessions("sessionCookie" /*cookieName*/, store))
-	r.NoRoute(func(c *gin.Context) { c.Redirect(http.StatusFound, common.HomeEndpoint) })
+	r.NoRoute(func(c *gin.Context) { handlers.GoHome(c) })
 
 	wsHub := chat.NewHub()
 	go wsHub.Run()

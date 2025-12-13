@@ -4,11 +4,11 @@
         <span>🔹 ginWeb</span>
     </a>
     <div class="nav-menu">
-        <a href="/" class="nav-item active">Board</a>
-        <a href="/chat" class="nav-item">Chat</a>
+        <a href="/" class="nav-item {{ if eq .Menu "board" }} active {{ end }}">Board</a>
+        <a href="/chat" class="nav-item {{ if eq .Menu "chat" }} active {{ end }}">Chat</a>
     </div>
     <div class="nav-profile">
-        <span class="user-badge">{{ .User }}</span>
+        <span class="user-badge">{{ .UserNickname }}</span>
         <a href="/logout" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">Logout</a>
     </div>
 </nav>

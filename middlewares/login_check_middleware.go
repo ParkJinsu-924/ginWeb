@@ -2,6 +2,7 @@
 
 import (
 	"ginWeb/common"
+	"ginWeb/handlers"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
@@ -34,7 +35,7 @@ func NotLoginCheckMiddleware() gin.HandlerFunc {
 		userId := session.Get(common.SessionUserIdKey)
 
 		if userId != nil {
-			c.Redirect(http.StatusFound, common.HomeEndpoint)
+			handlers.GoHome(c)
 			c.Abort()
 			return
 		}

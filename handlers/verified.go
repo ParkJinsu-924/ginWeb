@@ -1,6 +1,7 @@
 ﻿package handlers
 
 import (
+	"fmt"
 	"ginWeb/common"
 	"ginWeb/db"
 	"net/http"
@@ -17,7 +18,9 @@ func HomeHandler() func(c *gin.Context) {
 		tx := db.GetDB(db.MainDB).Order("id desc").Find(&posts)
 
 		if tx.Error != nil {
-			panic(tx.Error)
+			fmt.Println("HomeHandler Error: ", tx.Error)
+			GoHome(c)
+			return
 		}
 
 		MyHTMLRender(c, http.StatusOK, "index.html", gin.H{
@@ -64,10 +67,12 @@ func PostCreateHandler() func(c *gin.Context) {
 		}
 
 		if err := db.GetDB(db.MainDB).Create(&newPost).Error; err != nil {
-			panic(err)
+			fmt.Println("PostCreateHandler Error: ", err)
+			GoHome(c)
+			return
 		}
 
-		c.Redirect(http.StatusFound, common.HomeEndpoint)
+		GoHome(c)
 	}
 }
 
@@ -75,10 +80,10 @@ func PostDetailHandler() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		postId := c.Param("id")
 
-		var post db.Post
-		tx := db.GetDB(db.MainDB).First(&post, postId)
-		if tx.Error != nil {
-			panic(tx.Error)
+		post, res := getPostFromDB(postId)
+		if !res {
+			GoHome(c)
+			return
 		}
 
 		MyHTMLRender(c, http.StatusOK, "post_detail.html", gin.H{
@@ -92,15 +97,29 @@ func PostDeleteHandler() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		postId := c.PostForm("id")
 		if postId == "" {
-			c.Redirect(http.StatusFound, common.HomeEndpoint)
+			GoHome(c)
 			return
 		}
 
-		tx := db.GetDB(db.MainDB).Delete(&db.Post{}, postId)
-		if tx.Error != nil {
-			panic(tx.Error)
+		post, res := getPostFromDB(postId)
+		if !res {
+			GoHome(c)
+			return
 		}
 
-		c.Redirect(http.StatusFound, common.HomeEndpoint)
+		currentUserId := c.MustGet(common.SessionUserIdKey).(string)
+
+		if post.UserId != currentUserId {
+			GoHome(c)
+			return
+		}
+
+		if err := db.GetDB(db.MainDB).Delete(&post).Error; err != nil {
+			fmt.Println("Delete Error:", err)
+			c.HTML(http.StatusInternalServerError, "error.html", gin.H{"Message": "삭제 중 오류 발생"})
+			return
+		}
+
+		GoHome(c)
 	}
 }
