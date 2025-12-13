@@ -18,3 +18,7 @@ const (
 	PostDetailEndpoint = "/posts/:id"
 	PostDeleteEndpoint = "/posts/delete"
 )
+
+const (
+	ChatEndpoint = "/chat"
+)

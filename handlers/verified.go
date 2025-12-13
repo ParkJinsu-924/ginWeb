@@ -12,12 +12,6 @@ import (
 
 func HomeHandler() func(c *gin.Context) {
 	return func(c *gin.Context) {
-		val, exist := c.Get(common.SessionUserIdKey)
-		if !exist {
-			c.Abort()
-			return
-		}
-
 		var posts []db.Post
 
 		tx := db.GetDB(db.MainDB).Order("id desc").Find(&posts)
@@ -26,8 +20,7 @@ func HomeHandler() func(c *gin.Context) {
 			panic(tx.Error)
 		}
 
-		c.HTML(http.StatusOK, "index.html", gin.H{
-			"User":         val,
+		MyHTMLRender(c, http.StatusOK, "index.html", gin.H{
 			"Posts":        posts,
 			"PostFormPath": common.PostFormEndpoint,
 		})
@@ -49,7 +42,7 @@ func LogoutHandler() func(c *gin.Context) {
 
 func PostFormHandler() func(c *gin.Context) {
 	return func(c *gin.Context) {
-		c.HTML(http.StatusOK, "post_form.html", gin.H{
+		MyHTMLRender(c, http.StatusOK, "post_form.html", gin.H{
 			"PostCreatePath": common.PostCreateEndpoint,
 		})
 	}
@@ -88,7 +81,7 @@ func PostDetailHandler() func(c *gin.Context) {
 			panic(tx.Error)
 		}
 
-		c.HTML(http.StatusOK, "post_detail.html", gin.H{
+		MyHTMLRender(c, http.StatusOK, "post_detail.html", gin.H{
 			"Post":           post,
 			"DeletePostPath": common.PostDeleteEndpoint,
 		})

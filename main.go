@@ -1,6 +1,7 @@
 ﻿package main
 
 import (
+	"ginWeb/chat"
 	"ginWeb/common"
 	"ginWeb/db"
 	"ginWeb/handlers"
@@ -23,20 +24,37 @@ func main() {
 	r.Use(sessions.Sessions("sessionCookie" /*cookieName*/, store))
 	r.NoRoute(func(c *gin.Context) { c.Redirect(http.StatusFound, common.HomeEndpoint) })
 
-	r.GET(common.LoginEndpoint, handlers.LoginFormHandler())
-	r.POST(common.LoginEndpoint, handlers.LoginHandler())
-	r.GET(common.SignupEndpoint, handlers.SignupFormHandler())
-	r.POST(common.SignupEndpoint, handlers.SignupRegisterHandler())
+	wsHub := chat.NewHub()
+	go wsHub.Run()
+
+	frontGroup := r.Group("/")
+	frontGroup.Use(middlewares.NotLoginCheckMiddleware())
+	{
+		frontGroup.GET(common.LoginEndpoint, handlers.LoginFormHandler())
+		frontGroup.POST(common.LoginEndpoint, handlers.LoginHandler())
+		frontGroup.GET(common.SignupEndpoint, handlers.SignupFormHandler())
+		frontGroup.POST(common.SignupEndpoint, handlers.SignupRegisterHandler())
+	}
 
 	authGroup := r.Group("/")
 	authGroup.Use(middlewares.LoginCheckMiddleware())
 	{
 		authGroup.GET(common.HomeEndpoint, handlers.HomeHandler())
 		authGroup.GET(common.LogoutEndpoint, handlers.LogoutHandler())
+
+		// posting
 		authGroup.GET(common.PostFormEndpoint, handlers.PostFormHandler())
 		authGroup.POST(common.PostCreateEndpoint, handlers.PostCreateHandler())
 		authGroup.GET(common.PostDetailEndpoint, handlers.PostDetailHandler())
 		authGroup.POST(common.PostDeleteEndpoint, handlers.PostDeleteHandler())
+
+		// chat
+		authGroup.GET(common.ChatEndpoint, handlers.ChatPageHandler())
+		authGroup.GET("/ws", func(c *gin.Context) {
+			session := sessions.Default(c)
+			nickname := session.Get(common.SessionUserNicknameKey).(string)
+			chat.ServeWs(wsHub, c, nickname)
+		})
 	}
 
 	_ = r.Run(":8080")
