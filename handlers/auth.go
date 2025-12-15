@@ -27,6 +27,7 @@ func SignupRegisterHandler() func(c *gin.Context) {
 			UserId:   userId,
 			Password: password,
 			Nickname: username,
+			Tag:      1234, // TEMP
 		}
 
 		// 3. DB 저장 (Create)
@@ -63,8 +64,10 @@ func LoginHandler() func(c *gin.Context) {
 
 		// 로그인 성공 처리
 		session := sessions.Default(c)
+		session.Set(common.SessionUserUUIDKey, user.ID)
 		session.Set(common.SessionUserIdKey, user.UserId) // 세션에는 유저의 고유 ID를 넣음
 		session.Set(common.SessionUserNicknameKey, user.Nickname)
+		session.Set(common.SessionUserTagKey, user.Tag)
 		session.Save()
 
 		GoHome(c)

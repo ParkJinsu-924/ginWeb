@@ -4,6 +4,59 @@
     <meta charset="UTF-8">
     <title>{{ .Post.Title }} - NcInside</title>
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        /* 댓글 전용 스타일 (기존 style.css 변수 활용) */
+        .comment-section {
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 40px;
+        }
+        .comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        .comment-item {
+            background-color: #f9fafb; /* var(--background-color)보다 살짝 밝거나 다르게 */
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .comment-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+        .comment-author {
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .comment-body {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            white-space: pre-wrap; /* 줄바꿈 유지 */
+        }
+        .comment-delete-btn {
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        .comment-delete-btn:hover {
+            color: var(--danger-color);
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
@@ -18,23 +71,67 @@
         <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 24px;">
             <h1 style="font-size: 1.75rem; margin-bottom: 12px;">{{ .Post.Title }}</h1>
             <div style="display: flex; gap: 16px; color: var(--text-sub); font-size: 0.9rem;">
-                <span>Author: <strong>{{ .Post.UserId }}</strong></span>
+                <span>Author: <strong>{{ .PostAuthorNickname }}#{{ .PostAuthorTag }}</strong></span>
                 <span>•</span>
-                <span>{{ .Post.CreatedAt.Format "Jan 02, 2006 15:04" }}</span>
+                <span>{{ .Post.CreatedAt | prettyTime }}</span>
             </div>
         </div>
 
-        <div style="font-size: 1rem; line-height: 1.8; white-space: pre-wrap; min-height: 200px;">{{ .Post.Content }}</div>
+        <div style="font-size: 1rem; line-height: 1.8; white-space: pre-wrap; min-height: 150px;">{{ .Post.Content }}</div>
+
+        {{ if eq .UserIndex .Post.UserIndex }}
+            <div style="display: flex; justify-content: flex-end; margin-top: 30px; border-top: 1px solid #f3f4f6; padding-top: 20px;">
+                <form action="{{ .DeletePostPath }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                    <input type="hidden" name="id" value="{{ .Post.ID }}">
+                    <button type="submit" class="btn btn-danger" style="padding: 8px 16px; font-size: 0.9rem;">Delete Post</button>
+                </form>
+            </div>
+        {{ end }}
     </div>
 
-    {{ if eq .UserId .Post.UserId }}
-    <div style="display: flex; justify-content: flex-end; gap: 12px;">
-        <form action="{{ .DeletePostPath }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
-            <input type="hidden" name="id" value="{{ .Post.ID }}">
-            <button type="submit" class="btn btn-danger">Delete Post</button>
-        </form>
+    <div class="content-card comment-section">
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 20px;">Comments</h3>
+
+        <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <form action="{{ .CommentsCreatePath }}" method="POST">
+                <input type="hidden" name="post_id" value="{{ .Post.ID }}">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <textarea name="content" placeholder="Leave a comment..." required style="min-height: 80px; resize: vertical; background: white;"></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary" style="padding: 8px 20px;">Post Comment</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="comment-list">
+            {{ if .Comments }}
+                {{ range $idx, $commentData := .Comments }}
+                    <div class="comment-item">
+                        <div class="comment-meta">
+                            <div class="comment-author">
+                                <span>👤</span> {{ $commentData.User.Nickname }}
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <span>{{ $commentData.Comment.CreatedAt | prettyTime }}</span>
+
+                                <form action="/comments/delete" method="POST" style="display:inline;" onsubmit="return confirm('Delete comment?');">
+                                    <input type="hidden" name="comment_id" value="{{ $commentData.Comment.ID }}">
+                                    <input type="hidden" name="post_id" value="{{ $.Post.ID }}">
+                                    <button type="submit" class="comment-delete-btn">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="comment-body">{{ $commentData.Comment.Content }}</div>
+                    </div>
+                {{ end }}
+            {{ else }}
+                <div class="empty-state" style="padding: 30px 0; font-size: 0.9rem;">
+                    No comments yet. Be the first to join the conversation!
+                </div>
+            {{ end }}
+        </div>
     </div>
-    {{ end }}
 </div>
 
 </body>

@@ -1,11 +1,14 @@
 ﻿package main
 
 import (
+	"fmt"
 	"ginWeb/chat"
 	"ginWeb/common"
 	"ginWeb/db"
 	"ginWeb/handlers"
 	"ginWeb/middlewares"
+	"text/template"
+	"time"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -16,6 +19,26 @@ func main() {
 	db.InitializeDB()
 
 	r := gin.Default()
+	r.SetFuncMap(template.FuncMap{
+		"formatDate": func(t time.Time) string {
+			return t.Format(time.DateTime)
+		},
+		"prettyTime": func(t time.Time) string {
+			duration := time.Since(t)
+
+			if duration.Minutes() < 1 {
+				return "Just now"
+			}
+			if duration.Hours() < 1 {
+				return fmt.Sprintf("%d mins ago", int(duration.Minutes()))
+			}
+			if duration.Hours() < 24 {
+				return fmt.Sprintf("%d hours ago", int(duration.Hours()))
+			}
+
+			return t.Format(time.DateTime)
+		},
+	})
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/static", "./static")
 
@@ -44,8 +67,9 @@ func main() {
 		// posting
 		authGroup.GET(common.PostFormEndpoint, handlers.PostFormHandler())
 		authGroup.POST(common.PostCreateEndpoint, handlers.PostCreateHandler())
-		authGroup.GET(common.PostDetailEndpoint, handlers.PostDetailHandler())
+		authGroup.GET(common.PostDetailEndpoint+"/:id", handlers.PostDetailHandler())
 		authGroup.POST(common.PostDeleteEndpoint, handlers.PostDeleteHandler())
+		authGroup.POST(common.PostCommentsCreateEndpoint, handlers.PostCommentsCreateHandler())
 
 		// chat
 		authGroup.GET(common.ChatEndpoint, handlers.ChatPageHandler())

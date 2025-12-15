@@ -20,11 +20,11 @@ func LoginCheckMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		userNickname := session.Get(common.SessionUserNicknameKey)
-
 		// 컨텍스트에 유저 정보 세팅
+		c.Set(common.SessionUserUUIDKey, session.Get(common.SessionUserUUIDKey))
 		c.Set(common.SessionUserIdKey, userId)
-		c.Set(common.SessionUserNicknameKey, userNickname)
+		c.Set(common.SessionUserNicknameKey, session.Get(common.SessionUserNicknameKey))
+		c.Set(common.SessionUserTagKey, session.Get(common.SessionUserTagKey))
 		c.Next()
 	}
 }

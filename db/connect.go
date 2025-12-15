@@ -34,8 +34,9 @@ func InitializeDB() {
 		dbTypeAndNameMap[MainDB] = dbConfig{
 			FileName: "ncc.db",
 			Models: []any{
-				&User{}, // users
-				&Post{}, // posts
+				&User{},    // users
+				&Post{},    // posts
+				&Comment{}, // comments
 			},
 		}
 	}

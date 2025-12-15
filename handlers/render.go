@@ -12,15 +12,17 @@ func MyHTMLRender(c *gin.Context, code int, fileName string, data gin.H) {
 		data = gin.H{}
 	}
 
-	var keyVal any
-	var exists bool
-
-	if keyVal, exists = c.Get(common.SessionUserIdKey); exists {
-		data["UserId"] = keyVal.(string)
+	if val, exist := c.Get(common.SessionUserUUIDKey); exist {
+		data["UserIndex"] = val.(uint)
 	}
-
-	if keyVal, exists = c.Get(common.SessionUserNicknameKey); exists {
-		data["UserNickname"] = keyVal.(string)
+	if val, exist := c.Get(common.SessionUserIdKey); exist {
+		data["UserId"] = val.(string)
+	}
+	if val, exist := c.Get(common.SessionUserNicknameKey); exist {
+		data["UserNickname"] = val.(string)
+	}
+	if val, exist := c.Get(common.SessionUserTagKey); exist {
+		data["UserTag"] = val.(uint64)
 	}
 
 	currentPath := c.Request.URL.Path

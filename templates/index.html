@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Enterprise - Dashboard</title>
+    <title>ginWeb - PostBoard</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
 
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <h2 style="font-size: 1.5rem; font-weight: 700;">Enterprise</h2>
+        <h2 style="font-size: 1.5rem; font-weight: 700;">Post Board</h2>
         <a href="{{ .PostFormPath }}" class="btn btn-primary">
             + New Post
         </a>
@@ -34,9 +34,9 @@
                 <tr>
                     <td style="color: var(--text-sub);">{{ .ID }}</td>
                     <td><a href="/posts/{{ .ID }}" class="post-link">{{ .Title }}</a></td>
-                    <td>{{ .UserId }}</td>
+                    <td>{{ .User.Nickname }}</td>
                     <td style="color: var(--text-sub); font-size: 0.85rem;">
-                        {{ .CreatedAt.Format "2006-01-02 15:04" }}
+                        {{ .CreatedAt | prettyTime }}
                     </td>
                 </tr>
                 {{ end }}

@@ -8,7 +8,7 @@
         <a href="/chat" class="nav-item {{ if eq .Menu "chat" }} active {{ end }}">Chat</a>
     </div>
     <div class="nav-profile">
-        <span class="user-badge">{{ .UserNickname }}</span>
+        <span class="user-badge">{{ .UserNickname }}#{{ .UserTag }}</span>
         <a href="/logout" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">Logout</a>
     </div>
 </nav>
