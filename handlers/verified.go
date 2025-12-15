@@ -126,6 +126,7 @@ func PostDetailHandler() func(c *gin.Context) {
 			"CommentsCreatePath": common.PostCommentsCreateEndpoint,
 			"DeletePostPath":     common.PostDeleteEndpoint,
 			"Comments":           commentDataList,
+			"CommentDeletePath":  common.PostCommentsDeleteEndpoint,
 		})
 	}
 }
@@ -191,5 +192,20 @@ func PostCommentsCreateHandler() func(c *gin.Context) {
 		}
 
 		c.Redirect(http.StatusFound, fmt.Sprintf(common.PostDetailEndpoint+"/%d", post.ID))
+	}
+}
+
+func PostCommentsDeleteHandler() func(c *gin.Context) {
+	return func(c *gin.Context) {
+		commentId := c.PostForm("comment_id")
+		postId := c.PostForm("post_id")
+		if commentId == "" {
+			GoHome(c)
+			return
+		}
+
+		deleteCommentFromDB(commentId)
+
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf(common.PostDetailEndpoint+"/%s", postId))
 	}
 }

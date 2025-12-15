@@ -20,6 +20,16 @@ func getPostFromDB(postId string) (*db.Post, bool) {
 	return &post, true
 }
 
+func deletePostFromDB(postId string) bool {
+	tx := db.GetDB(db.MainDB).Delete(&db.Post{}, postId)
+	return tx.Error == nil
+}
+
+func deleteCommentFromDB(commentId string) bool {
+	tx := db.GetDB(db.MainDB).Delete(&db.Comment{}, commentId)
+	return tx.Error == nil
+}
+
 func getUserDataFromDB(userIndex uint) (*db.User, bool) {
 	var user db.User
 	tx := db.GetDB(db.MainDB).First(&user, userIndex)

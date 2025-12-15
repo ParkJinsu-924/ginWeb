@@ -70,6 +70,7 @@ func main() {
 		authGroup.GET(common.PostDetailEndpoint+"/:id", handlers.PostDetailHandler())
 		authGroup.POST(common.PostDeleteEndpoint, handlers.PostDeleteHandler())
 		authGroup.POST(common.PostCommentsCreateEndpoint, handlers.PostCommentsCreateHandler())
+		authGroup.POST(common.PostCommentsDeleteEndpoint, handlers.PostCommentsDeleteHandler())
 
 		// chat
 		authGroup.GET(common.ChatEndpoint, handlers.ChatPageHandler())
